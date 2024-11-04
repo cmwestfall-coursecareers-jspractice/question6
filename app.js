@@ -1,25 +1,22 @@
-// come back to this one too. could not do without the solution
-
 let text = "Hello, World!";
 let operations = [
   function (text) {
-    return text.split("").reverse().join("");
+    return text.toUpperCase();
   },
   function (text) {
-    return text.charAt(0).toUpperCase() + text.slice(1);
+    return text.replace(/o/g, "0");
   },
 ];
 let ranges = [
-  [6, 6],
-  [8, 11],
+  [2, 4],
+  [7, 12],
 ];
 
 function processText(text, operations, ranges) {
-  let segments = [];
+  let result = [];
 
-  // in case the ranges don't cover the beginning of the text
   if (ranges[0][0] > 0) {
-    segments.push(text.substring(0, ranges[0][0]));
+    result.push(text.substring(0, ranges[0][0]));
   }
 
   for (let i = 0; i < ranges.length; i++) {
@@ -28,14 +25,18 @@ function processText(text, operations, ranges) {
     for (let operation of operations) {
       currentSegment = operation(currentSegment);
     }
-    segments.push(currentSegment);
+    result.push(currentSegment);
 
-    let beginningNextRange =
+    let beginningNextSegment =
       i < ranges.length - 1 ? ranges[i + 1][0] : text.length;
-    let innerSegment = text.substring(ranges[i][1] + 1, beginningNextRange);
-    segments.push(innerSegment);
+
+    let inBetweenSegment = text.substring(
+      ranges[i][1] + 1,
+      beginningNextSegment
+    );
+    result.push(inBetweenSegment);
   }
-  console.log(segments.join(""));
+  console.log(result.join(""));
 }
 
 processText(text, operations, ranges);
